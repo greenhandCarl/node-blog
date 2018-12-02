@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+
+<ol class="breadcrumb">
+  <li><a href="/admin">管理首页</a></li>
+  <li class='active'>修改内容</li>
+</ol>
+
+
+<form method='post' style='text-align: left;'>
+  <div class="form-group" style='text-align: left;'>
+    <h5 >内容类型</h5>
+    <select class="form-control" name="type" id="type">
+      {% for category in categories %}
+        {% if content.category.name === category.name %}
+        <option value="{{category._id.toString()}}" selected>{{category.name}}</option>
+        {% else %}
+        <option value="{{category._id.toString()}}">{{category.name}}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+    <h5>内容标题</h5>
+    <input type="text" value='{{content.title}}' name='title' placeholder="请输入内容标题" class="form-control" />
+    <h5>内容简介</h5>
+    <input type="textarea" value='{{content.desc}}' name='desc' style='height: 100px;width: 100%;' rows='5' id="" placeholder="请输入内容简介">
+    <h5>具体内容</h5>
+    <input type="textarea" value='{{content.content}}' name='content' class="form-control" style='height: 100px;' rows='10' id="" placeholder="请输入添加内容">
+  </div>
+  <button type="submit" class="btn btn-default">提交</button>
+</form> 
+
+{% endblock %}

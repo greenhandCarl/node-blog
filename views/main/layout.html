@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script>
+        /* 高清方案设置代码，详情见 https://github.com/ant-design/ant-design-mobile/wiki/antd-mobile-0.8-%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC%E3%80%8C%E9%AB%98%E6%B8%85%E3%80%8D%E6%96%B9%E6%A1%88%E8%AE%BE%E7%BD%AE */
+        ; (function (win, lib) {
+            var doc = win.document;
+            var docEl = doc.documentElement;
+             var devicePixelRatio = win.devicePixelRatio;
+            var dpr = 1; // 物理像素与逻辑像素的对应关系
+            var scale = 1; // css像素缩放比率
+            // 设置viewport
+            function setViewport() {
+                var isIPhone = !!win.navigator.appVersion.match(/iphone/gi);
+                if (isIPhone) {
+                    if (devicePixelRatio >= 3) {
+                        dpr = 3;
+                    }
+                    else if (devicePixelRatio === 2) {
+                        dpr = 2;
+                    }
+                    else {
+                        dpr = 1;
+                    }
+                }
+                win.devicePixelRatioValue = dpr;
+                //win.devicePixelRatio = win.devicePixelRatio*win.devicePixelRatio;
+                scale = 1 / dpr;
+                var metaEl = doc.createElement('meta');
+                metaEl.setAttribute('name', 'viewport');
+                metaEl.setAttribute('content', 'initial-scale=' + scale + ', maximum-scale=' + scale + ', minimum-scale=' + scale + ', user-scalable=no');
+                if (docEl.firstElementChild) {
+                    docEl.firstElementChild.appendChild(metaEl);
+                }
+                else {
+                    var wrap = doc.createElement('div');
+                    wrap.appendChild(metaEl);
+                    doc.write(wrap.innerHTML);
+                }
+            }
+            setViewport();
+            var newBase = 100;
+             function setRem() {
+                var visualView = Math.min(docEl.getBoundingClientRect().width, lib.maxWidth * dpr); // visual viewport
+                newBase = 100 * visualView / lib.desinWidth;
+                docEl.style.fontSize = newBase + 'px';
+            }
+            var tid;
+            lib.desinWidth = 640;
+            lib.baseFont = 18;
+            lib.maxWidth = 540;
+            lib.init = function () {
+                win.addEventListener('resize', function () {
+                    clearTimeout(tid);
+                    tid = setTimeout(setRem, 300);
+                }, false);
+                /*win.addEventListener('onorientationchange', function () {
+                 clearTimeout(tid);
+                 tid = setTimeout(setRem, 300);
+                 }, false);*/
+                win.addEventListener('pageshow', function (e) {
+                    if (e.persisted) {
+                        clearTimeout(tid);
+                        tid = setTimeout(setRem, 300);
+                    }
+                }, false);
+                if (doc.readyState === 'complete') {
+                    doc.body.style.fontSize = lib.baseFont * dpr + 'px';
+                }
+                else {
+                    doc.addEventListener('DOMContentLoaded', function (e) {
+                        doc.body.style.fontSize = lib.baseFont * dpr + 'px';
+                    }, false);
+                }
+                setRem();
+                docEl.setAttribute('data-dpr', dpr);
+            };
+        })(window, window['adaptive'] || (window['adaptive'] = {}));
+
+
+         window['adaptive'].desinWidth = 750;
+        window['adaptive'].baseFont = 18;
+        window['adaptive'].maxWidth = 480;
+        window['adaptive'].init();
+    </script>
+  <script src="/public/static/jquery-3.3.1.min.js"></script>
+  <script src="/public/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/public/static/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="/public/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/public/css/common.css">
+  <link rel="stylesheet" href="/public/css/index.css">
+  <link rel="stylesheet" href="/public/css/comment.css">
+</head>
+<body>
+  <div class='index_banner'></div>
+  <nav style='height: 40px;line-height: 40px;'>
+    <div class="container">
+      <div class="nav_row" style="margin: 0 auto;width: {{ (categories.length + 1) * 6}}em;">
+        <div class="fl{% if !cate %} row_active{% endif %}" style='width: 6em;'>
+          <a href="/">首页</a>
+        </div>
+        {% for category in categories %}
+          <div class="fl{% if cate === category.id %} row_active{% endif %}" style='width: 6em;cursor: pointer;'><a href='/?category={{category.id}}'>{{category.name}}</a></div>
+        {% endfor %}
+      </div>
+    </div>
+  </nav>
+  <main>
+    <div class="container" style='padding-top: 30px;'>
+      <div class="row" style="width: 1000px;margin: 0 auto;">
+        {% block main %}{% endblock %}
+        <div class="col-lg-4 col-md-4 fr main_right" style='margin-right: 4%;'>
+          {% if userInfo._id %}
+          <div class='user_info_container' style='width: 100%;min-height: 140px;background-color: #fff;margin-bottom: 20px;'>
+            <div style="position: relative;height: 20px;line-height: 20px;border-bottom: 1px solid #f6f5f7">
+              <span class="user_info_title">用户信息</span>
+            </div>
+            <div class='username'>{{userInfo.username}}</div>
+            <div>
+              {% if userInfo.isAdmin %}
+              <span style='color: #be7166;' class='info'>你好，你是管理员</span>
+              <a href='/admin'>管理后台 &gt;&gt;</a>
+              {% else %}
+              <span style='color: #be7166;' class='info'>你好，欢迎光临我的博客</span>
+              {% endif %}
+              <!-- <a href="#">你可以点击这里进入管理</a> -->
+            </div>
+            <div>
+              <a href="javascript:;" id='signout'>退出</a>
+            </div>
+          </div>
+          {% else %}
+          <div class="signin_container" style='width: 100%;min-height: 174px;background-color: #fff;margin-bottom: 20px;'>
+            <div style="position: relative;height: 20px;line-height: 20px;border-bottom: 1px solid #f6f5f7">
+              <span class="signin_title">登录</span>
+            </div>
+            <div style='height: 24px;line-height: 24px;'>
+              <span class='fl' style='width: 5em;height: 100%;text-align: right;'>用户名：</span>
+              <input class='fl' name='username' style='height: 100%;width: 150px;' type="text" />
+            </div>
+            <div style='height: 24px;line-height: 24px;'>
+              <span class='fl' style='width: 5em;height: 100%;text-align: right;'>密码：</span>
+              <input class='fl' name='password' style='height: 100%;width: 150px;' type="password" />
+            </div>
+            <div style='height: 24px;line-height: 24px;font-size: 12px;'>
+              <span class='fl' style='width: 5em;height: 100%;text-align: right;'></span>
+              <input class='fl' id='signin' style='height: 100%;width: 150px;' type="button" value='登录' />
+            </div>
+            <div>还没注册？<a href="javascript:;">马上注册</a></div>
+            <p class='warnText' style="color: red;margin-top: 5px;"></p>
+          </div>
+
+          <div class='signup_container' style='display: none;width: 100%;min-height: 206px;background-color: #fff;margin-bottom: 20px;'>
+            <div style="position: relative;height: 20px;line-height: 20px;border-bottom: 1px solid #f6f5f7">
+              <span class="signup_title">注册</span>
+            </div>
+            <div style='height: 24px;line-height: 24px;'>
+              <span class='fl' style='width: 5em;height: 100%;text-align: right;'>用户名：</span>
+              <input class='fl' name='username' style='height: 100%;width: 150px;' type="text" />
+            </div>
+            <div style='height: 24px;line-height: 24px;'>
+              <span class='fl' style='width: 5em;height: 100%;text-align: right;'>密码：</span>
+              <input class='fl' name='password' style='height: 100%;width: 150px;' type="password" />
+            </div>
+            <div style='height: 24px;line-height: 24px;'>
+              <span class='fl' style='width: 5em;height: 100%;text-align: right;'>确认：</span>
+              <input class='fl' name='repassword' style='height: 100%;width: 150px;' type="password" />
+            </div>
+            <div style='height: 24px;line-height: 24px;font-size: 12px;'>
+              <span class='fl' style='width: 5em;height: 100%;text-align: right;'></span>
+              <input class='fl' id='signup' style='height: 100%;width: 150px;' type="button" value='注册' />
+            </div>
+            <div>已有账号？<a href="javascript:;">马上登录</a></div>
+            <p class='warnText' style="color: red;margin-top: 5px;"></p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+<script src='/public/js/index.js'></script>
+</html>

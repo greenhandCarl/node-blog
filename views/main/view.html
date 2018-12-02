@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+  <div class="col-lg-7 col-md-7 fl main_left" style='margin-left: 4%;'>
+      <div style='min-height: 170px;width: 100%;background-color: #fff;margin-bottom: 20px;'>
+        <div class="articleTitle">{{content.title}}</div>
+        <div class="articleInfo">
+          <div class='articleUser'>
+            <span>作者:</span>
+            <text>{{content.user.username}}</text>&nbsp;
+            <span>时间:</span>
+            <text>{{content.addTime|date('Y/m/d H:m:s', -9*60)}}</text>&nbsp;
+            <span>阅读:</span>
+            <text>{{content.views}}</text>&nbsp;
+            <span>评论:</span>
+            <text>10</text>
+          </div>
+          <p class='articleDesc'>
+            {{content.content}}
+          </p>
+        </div>
+      </div>
+      {% include '../commom/comment.html' %}
+  </div>
+{% endblock %}

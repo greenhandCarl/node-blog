@@ -1,0 +1,9 @@
+<nav aria-label="...">
+  <ul class="pager">
+    <li class="previous"><a href="/admin{{pagination.url}}{% if pagination.currentPage > 1 %}?page={{pagination.currentPage-1}}{% else %}?page=1{% endif %}"><span aria-hidden="true">&larr;</span> 上一页</a></li>
+    <li>
+      一共有 {{pagination.total}} 条数据，每页显示 {{pagination.size}} 条数据，一共 {{pagination.pages}} 页，当前第 {{pagination.currentPage}} 页
+    </li>
+    <li class="next"><a href="/admin{{pagination.url}}{% if pagination.currentPage < pagination.pages %}?page={{pagination.currentPage+1}}{% else %}?page={{pagination.pages}}{% endif %}">下一页 <span aria-hidden="true">&rarr;</span></a></li>
+  </ul>
+</nav>

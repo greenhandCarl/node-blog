@@ -1,0 +1,60 @@
+.commentContainer {
+  min-height: 170px;
+  width: 100%;
+  background-color: #fff;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+.commentContainer .commentTitle {
+  padding: 0 20px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 15px;
+  color: #1a1a1a;
+  font-weight: 700;
+  border-bottom: 1px solid #e0e1e5;
+  text-align: left;
+}
+.comment_main {
+  width: 100%;
+  padding: 12px 20px 10px;
+  font-size: 15px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e0e1e5;
+}
+.comment_main li {
+  overflow: hidden;
+}
+.user_info {
+  position: relative;
+  height: 27px;
+  padding-right: 3px;
+  padding-left: 1px;
+  margin-bottom: 5px;
+  line-height: 24px;
+}
+.comment_content {
+  height: 27px;
+  padding-right: 3px;
+  padding-left: 1px;
+  margin-bottom: 5px;
+  line-height: 24px;
+}
+.interaction {
+  height: 24px;
+  font-size: 14px;
+  line-height: 24px;
+}
+.commentContainer textarea {
+  padding: 10px;
+  width: 94%;
+  height: 50px;
+}
+.btnContainer {
+  text-align: left;
+  padding-left: 3%;
+}
+.btnContainer input[type='button'] {
+  width: 62px;
+  height: 24px;
+}
